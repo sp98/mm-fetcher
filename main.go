@@ -26,6 +26,7 @@ func main() {
 	log.Println("Starting Fetcher")
 	isTest := os.Getenv(IsTest)
 	if len(isTest) > 0 {
+		utility.IsMarketOpen()
 		dummySetup()
 	} else {
 		setup()
@@ -33,7 +34,7 @@ func main() {
 }
 
 func setup() {
-
+	go utility.IsMarketClosed()
 	tkr := ticker.NewTicker(os.Getenv("API_KEY"), os.Getenv("API_SECRET"), os.Getenv("API_REQUESTTOKEN"),
 		utility.GetSubscriptions(os.Getenv("Stocks")), utility.GetStocks(os.Getenv("Stocks")))
 	err := tkr.Connect()
@@ -52,6 +53,7 @@ func setup() {
 }
 
 func dummySetup() {
+	go utility.IsMarketClosed()
 	//Run with dummy data when market is closed!
 	testTicker := ticker.NewTicker(os.Getenv(APIKey), os.Getenv(APISecret), os.Getenv(APIRequestToken),
 		utility.GetSubscriptions(os.Getenv(Stocks)), utility.GetStocks(os.Getenv(Stocks)))
