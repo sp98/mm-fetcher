@@ -2,6 +2,7 @@ package ticker
 
 import (
 	"fmt"
+	"log"
 	"strconv"
 	"time"
 
@@ -27,17 +28,18 @@ func onClose(code int, reason string) {
 
 // Triggered when connection is established and ready to send and accept data
 func onConnect() {
-	fmt.Println("Connected")
+	fmt.Println("Connection Status: Connected")
 	err := ticker.Subscribe(subscriptions)
 	if err != nil {
 		fmt.Println("err: ", err)
 	}
+	log.Println("Mode: ", kiteticker.ModeFull)
 	ticker.SetMode(kiteticker.ModeFull, subscriptions)
 }
 
 // Triggered when tick is recevived
 func onTick(tick kiteticker.Tick) {
-	fmt.Println("Tick: ", tick)
+	log.Printf("Tick: %+v", tick)
 	StoreTickInDB(&tick)
 }
 

@@ -21,44 +21,34 @@ var (
 
 //Ticker fetches Tick data
 type Ticker struct {
-	KC              *kiteconnect.Client
-	APIKey          string
-	APISecret       string
-	APIRequestToken string
-	APIAccesToken   string
-	Subscrptions    []uint32
-	Stocks          [][]string
+	KC            *kiteconnect.Client
+	APIKey        string
+	APISecret     string
+	APIAccesToken string
+	Subscrptions  []uint32
+	Stocks        [][]string
 }
 
 //NewTicker creates a new Ticker object
-func NewTicker(apiKey, apiSecret, apiReqToken, apiAccessToken string, subs []uint32, stocks [][]string) *Ticker {
+func NewTicker(apiKey, apiSecret, apiAccessToken string, subs []uint32, stocks [][]string) *Ticker {
 	return &Ticker{
-		APIKey:          apiKey,
-		APISecret:       apiSecret,
-		APIRequestToken: apiReqToken,
-		APIAccesToken:   apiAccessToken,
-		Subscrptions:    subs,
-		Stocks:          stocks,
+		APIKey:        apiKey,
+		APISecret:     apiSecret,
+		APIAccesToken: apiAccessToken,
+		Subscrptions:  subs,
+		Stocks:        stocks,
 	}
 }
 
 //Connect to Kite API
 func (t Ticker) Connect() error {
 	kc := kiteconnect.New(t.APIKey)
-
-	// // Get user details and access token
-	// data, err := kc.GenerateSession(t.APIRequestToken, t.APISecret)
-	// if err != nil {
-	// 	return fmt.Errorf("error in generating kite session. %+v", err)
-	// }
-
-	// Set access token
-	// t.APIAccesToken = dat.AccessToken
 	if t.APIAccesToken == "" {
-		return fmt.Errorf("failed to get kite API access token")
+		return fmt.Errorf("empty api access token env variable")
 	}
 	kc.SetAccessToken(t.APIAccesToken)
 
+	//Set Kite Ticker client
 	t.KC = kc
 	return nil
 }
