@@ -35,7 +35,7 @@ func IsWithInMarketOpenTime() (bool, error) {
 	}
 
 	currentTime := time.Now()
-	if currentTime.After(mot) && currentTime.Before(mct) && currentTime.Weekday() != 6 && currentTime.Weekday() != 7 {
+	if currentTime.After(mot) && currentTime.Before(mct) && int(currentTime.Weekday()) != 6 && int(currentTime.Weekday()) != 7 {
 		return true, nil
 	}
 	return false, nil
@@ -95,6 +95,7 @@ func GetStocks(stock string) [][]string {
 		result = append(result, sSlice)
 	}
 
+	log.Println("here  ", result)
 	return result
 }
 

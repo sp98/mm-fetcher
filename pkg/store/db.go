@@ -5,8 +5,6 @@ import (
 	"log"
 	"time"
 
-	"github.com/fetcher/pkg/utility"
-
 	client "github.com/orourkedd/influxdb1-client/client"
 	kiteticker "github.com/zerodhatech/gokiteconnect/ticker"
 )
@@ -112,7 +110,7 @@ func (db DB) CreateTickCQ(tradeInterval string) error {
 //StoreTick saves tick data in influx db
 func (db DB) StoreTick(tickData *kiteticker.Tick) error {
 
-	buyDepth, SellDepth := utility.ParseDepth(tickData.Depth)
+	//buyDepth, SellDepth := utility.ParseDepth(tickData.Depth)
 	dbClient, _ := db.GetClient()
 	defer dbClient.Close()
 
@@ -134,12 +132,12 @@ func (db DB) StoreTick(tickData *kiteticker.Tick) error {
 		"TotalBuy":           tick.TotalBuy,
 		"TotalSell":          tick.TotalSell,
 		"AverageTradePrice":  tick.AverageTradePrice,
-		"BuyDepth":           buyDepth,
-		"SellDepth":          SellDepth,
-		"Open":               tick.OHLC.Open,
-		"High":               tick.OHLC.High,
-		"Low":                tick.OHLC.Low,
-		"Close":              tick.OHLC.Close,
+		// "BuyDepth":           buyDepth,
+		// "SellDepth":          SellDepth,
+		"Open":  tick.OHLC.Open,
+		"High":  tick.OHLC.High,
+		"Low":   tick.OHLC.Low,
+		"Close": tick.OHLC.Close,
 	}
 	tags := map[string]string{
 		// "InstrumentToken": fmt.Sprint(tick.InstrumentToken),
