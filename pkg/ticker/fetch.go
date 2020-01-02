@@ -32,11 +32,13 @@ func onConnect() {
 	if err != nil {
 		fmt.Println("err: ", err)
 	}
+	ticker.SetMode(kiteticker.ModeFull, subscriptions)
 }
 
 // Triggered when tick is recevived
 func onTick(tick kiteticker.Tick) {
 	fmt.Println("Tick: ", tick)
+	StoreTickInDB(&tick)
 }
 
 // Triggered when reconnection is attempted which is enabled by default

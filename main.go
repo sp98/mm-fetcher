@@ -16,6 +16,10 @@ const (
 	APISecret = "API_SECRET"
 	//APIRequestToken is the Zeoradha Kite connect API Request Token
 	APIRequestToken = "API_REQUESTTOKEN"
+
+	//APIAccessToken is the access token to connect to kite API
+	APIAccessToken = "API_ACCESSTOKEN"
+
 	//Stocks are the share markets stocks to fetch ticks from
 	Stocks = "STOCKS"
 	//IsTest runs fetcher with fake data for testing
@@ -23,31 +27,36 @@ const (
 )
 
 func main() {
-	log.Println("Starting Fetcher")
 	isTest := os.Getenv(IsTest)
-	if len(isTest) > 0 {
+	if isTest == "true" {
+		log.Println("Starting Fetcher with fake data")
 		utility.IsMarketOpen()
 		dummySetup()
 	} else {
+		log.Println("Starting Fetcher")
+		utility.IsMarketOpen()
 		setup()
 	}
+
 }
 
 func setup() {
 	go utility.IsMarketClosed()
-	tkr := ticker.NewTicker(os.Getenv("API_KEY"), os.Getenv("API_SECRET"), os.Getenv("API_REQUESTTOKEN"),
-		utility.GetSubscriptions(os.Getenv("Stocks")), utility.GetStocks(os.Getenv("Stocks")))
+	tkr := ticker.NewTicker(os.Getenv(APIKey), os.Getenv(APISecret), os.Getenv(APIRequestToken), os.Getenv(APIAccessToken),
+		utility.GetSubscriptions(os.Getenv(Stocks)), utility.GetStocks(os.Getenv(Stocks)))
 	err := tkr.Connect()
 	if err != nil {
 		log.Fatalf("failed connecting to Kite API. %+v", err)
 		return
 	}
+
+	log.Printf("Ticker - %+v", tkr)
+
 	err = tkr.InitDB()
 	if err != nil {
 		log.Fatalf("failed intializding Database to Kite API. %+v", err)
 		return
 	}
-	log.Printf("Ticker - %+v", tkr)
 	tkr.Start()
 
 }
@@ -55,7 +64,7 @@ func setup() {
 func dummySetup() {
 	go utility.IsMarketClosed()
 	//Run with dummy data when market is closed!
-	testTicker := ticker.NewTicker(os.Getenv(APIKey), os.Getenv(APISecret), os.Getenv(APIRequestToken),
+	testTicker := ticker.NewTicker(os.Getenv(APIKey), os.Getenv(APISecret), os.Getenv(APIRequestToken), os.Getenv(APIAccessToken),
 		utility.GetSubscriptions(os.Getenv(Stocks)), utility.GetStocks(os.Getenv(Stocks)))
 	log.Println("Ticker object - ", testTicker)
 	err := testTicker.InitDB()
