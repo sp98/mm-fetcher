@@ -14,8 +14,6 @@ const (
 	APIKey = "API_KEY"
 	//APISecret is the Zeoradha Kite connect API Secret
 	APISecret = "API_SECRET"
-	//APIRequestToken is the Zeoradha Kite connect API Request Token
-	APIRequestToken = "API_REQUESTTOKEN"
 
 	//APIAccessToken is the access token to connect to kite API
 	APIAccessToken = "API_ACCESSTOKEN"
@@ -41,8 +39,9 @@ func main() {
 }
 
 func setup() {
+
 	go utility.IsMarketClosed()
-	tkr := ticker.NewTicker(os.Getenv(APIKey), os.Getenv(APISecret), os.Getenv(APIRequestToken), os.Getenv(APIAccessToken),
+	tkr := ticker.NewTicker(os.Getenv(APIKey), os.Getenv(APISecret), os.Getenv(APIAccessToken),
 		utility.GetSubscriptions(os.Getenv(Stocks)), utility.GetStocks(os.Getenv(Stocks)))
 	err := tkr.Connect()
 	if err != nil {
@@ -54,7 +53,7 @@ func setup() {
 
 	err = tkr.InitDB()
 	if err != nil {
-		log.Fatalf("failed intializding Database to Kite API. %+v", err)
+		log.Fatalf("error initializing infux db to store Kite API response. %+v", err)
 		return
 	}
 	tkr.Start()
@@ -64,7 +63,7 @@ func setup() {
 func dummySetup() {
 	go utility.IsMarketClosed()
 	//Run with dummy data when market is closed!
-	testTicker := ticker.NewTicker(os.Getenv(APIKey), os.Getenv(APISecret), os.Getenv(APIRequestToken), os.Getenv(APIAccessToken),
+	testTicker := ticker.NewTicker(os.Getenv(APIKey), os.Getenv(APISecret), os.Getenv(APIAccessToken),
 		utility.GetSubscriptions(os.Getenv(Stocks)), utility.GetStocks(os.Getenv(Stocks)))
 	log.Println("Ticker object - ", testTicker)
 	err := testTicker.InitDB()

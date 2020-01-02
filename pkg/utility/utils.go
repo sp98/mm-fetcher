@@ -1,6 +1,7 @@
 package utility
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"strconv"
@@ -56,7 +57,7 @@ func IsMarketOpen() {
 
 }
 
-//IsMarketClosed is finite loop that panics when the market is closed
+//IsMarketClosed is finite loop that checks for market close time and panics when the market is closed.
 func IsMarketClosed() {
 	for {
 		t, _ := IsWithInMarketOpenTime()
@@ -104,14 +105,30 @@ func ParseDepth(depth kiteticker.Depth) (string, string) {
 	var buyDepth string
 	var sellDepth string
 	for _, bd := range depth.Buy {
-		buyDepth = fmt.Sprintf("%v,%v,%v,%v,%v,%v,%v,%v", buyDepth, ";", bd.Price, ";", bd.Quantity, ";", bd.Orders, ",")
+		out, err := json.Marshal(&bd)
+		if err != nil {
+			log.Println("error converting market buy depth to string")
+		}
+		buyDepth = buyDepth + getDephStringSeparator(buyDepth) + string(out)
 	}
 
 	for _, sd := range depth.Sell {
-		sellDepth = fmt.Sprintf("%v,%v,%v,%v,%v,%v,%v,%v", buyDepth, ";", sd.Price, ";", sd.Quantity, ";", sd.Orders, ",")
+		out, err := json.Marshal(&sd)
+		if err != nil {
+			log.Println("error converting market buy depth to string")
+		}
+
+		sellDepth = sellDepth + getDephStringSeparator(sellDepth) + string(out)
 	}
 
 	return buyDepth, sellDepth
+}
+
+func getDephStringSeparator(actualString string) string {
+	if actualString != "" {
+		return ";"
+	}
+	return ""
 }
 func getUnit32(str string) uint32 {
 	u, _ := strconv.ParseUint(str, 10, 32)
