@@ -56,8 +56,8 @@ func (t Ticker) Connect() error {
 //InitDB creates the Continues Queries for all the stocks across all the intervals
 func (t Ticker) InitDB() error {
 
-	DBUrl = os.Getenv("DB_URL")
-	DBName = os.Getenv("DB_NAME")
+	DBUrl = os.Getenv("INFLUX_DB_URL")
+	DBName = os.Getenv("TICK_STORE_DB_NAME")
 	db := store.NewDB(DBUrl, DBName, "")
 	err := db.CreateDB()
 	if err != nil {
