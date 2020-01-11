@@ -39,7 +39,6 @@ func onConnect() {
 
 // Triggered when tick is recevived
 func onTick(tick kiteticker.Tick) {
-	log.Printf("Tick: %+v", tick)
 	StoreTickInDB(&tick)
 }
 

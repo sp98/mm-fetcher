@@ -72,7 +72,6 @@ func (t Ticker) InitDB() error {
 		db := store.NewDB(DBUrl, DBName, "")
 		db.Measurement = fmt.Sprintf("%s_%s", "ticks", instrument[2])
 		for _, interval := range Intervals {
-			log.Println("Inside")
 			err := db.CreateTickCQ(interval)
 			if err != nil {
 				return fmt.Errorf("error creating CQ for the isntrument: +%v. %+v", instrument, err)

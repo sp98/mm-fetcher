@@ -74,7 +74,7 @@ func dummySetup() {
 	for i := 0; i < 1000; i++ {
 		time.Sleep(2 * time.Second)
 		ticks := ticker.DummyTicks()
-		log.Printf("Ticks - %+v", ticks)
+		//log.Printf("Ticks - %+v", ticks)
 		ticker.StoreTickInDB(ticks)
 	}
 }

@@ -95,8 +95,6 @@ func GetStocks(stock string) [][]string {
 		sSlice := strings.Split(s, ";")
 		result = append(result, sSlice)
 	}
-
-	log.Println("here  ", result)
 	return result
 }
 
