@@ -28,7 +28,7 @@ func main() {
 	isTest := os.Getenv(IsTest)
 	if isTest == "true" {
 		log.Println("Starting Fetcher with fake data")
-		utility.IsMarketOpen()
+		//utility.IsMarketOpen()
 		dummySetup()
 	} else {
 		log.Println("Starting Fetcher")
@@ -61,7 +61,7 @@ func setup() {
 }
 
 func dummySetup() {
-	go utility.IsMarketClosed()
+	//go utility.IsMarketClosed()
 	//Run with dummy data when market is closed!
 	testTicker := ticker.NewTicker(os.Getenv(APIKey), os.Getenv(APISecret), os.Getenv(APIAccessToken),
 		utility.GetSubscriptions(os.Getenv(Stocks)), utility.GetStocks(os.Getenv(Stocks)))

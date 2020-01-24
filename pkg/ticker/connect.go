@@ -16,7 +16,7 @@ var (
 	//DBName is the database name to store tick data
 	DBName = ""
 	//Intervals for storing stock data. Options 5m, 10m 15m
-	Intervals = []string{"5m"}
+	Intervals = []string{"5m, 10m, 15m"}
 )
 
 //Ticker fetches Tick data
